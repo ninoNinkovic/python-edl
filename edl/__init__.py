@@ -395,19 +395,19 @@ class Event(object):
             "%(effect)s" \
             "%(notes)s" \
             "%(timewarp)s" % {
-            'num': self.num if self.num else '',
-            'reel': self.reel if self.reel else '',
-            'track': self.track if self.track else '',
-            'aux': self.aux if self.aux else '',
-            'tr_code': self.tr_code if self.tr_code else '',
-            'src_start_tc': self.src_start_tc,
-            'src_end_tc': self.src_end_tc,
-            'rec_start_tc': self.rec_start_tc,
-            'rec_end_tc': self.rec_end_tc,
-            'effect': effect,
-            'notes': '%s\n' % '\n'.join(self.comments)
+                'num': self.num if self.num else '',
+                'reel': self.reel if self.reel else '',
+                'track': self.track if self.track else '',
+                'aux': self.aux if self.aux else '',
+                'tr_code': self.tr_code if self.tr_code else '',
+                'src_start_tc': self.src_start_tc,
+                'src_end_tc': self.src_end_tc,
+                'rec_start_tc': self.rec_start_tc,
+                'rec_end_tc': self.rec_end_tc,
+                'effect': effect,
+                'notes': '%s\n' % '\n'.join(self.comments)
                 if self.comments else '',
-            'timewarp': '%s\n' % self.timewarp.to_string()
+                'timewarp': '%s\n' % self.timewarp.to_string()
                 if self.has_timewarp() else ''}
 
         return s

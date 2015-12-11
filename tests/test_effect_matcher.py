@@ -2,7 +2,7 @@
 
 import unittest
 import re
-from edl import EffectMatcher, List, Event, Effect
+from edl import EffectMatcher, EDL, Event, Effect
 
 
 class EffectMatcherTestCase(unittest.TestCase):
@@ -32,7 +32,7 @@ class EffectMatcherTestCase(unittest.TestCase):
     def test_EffectMatcher_apply_is_working_properly(self):
         """testing if the EffectMatcher.apply() is working properly
         """
-        ed_list = List('24')
+        ed_list = EDL('24')
         event = Event({})
         event.transition = Effect()
         ed_list.append(event)

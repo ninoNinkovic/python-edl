@@ -8,16 +8,16 @@ import re
 import pprint
 import timecode
 
-__version__ = '0.1.11'
+__version__ = '0.1.12'
 
 
-class List(object):
+class EDL(object):
     """The EDL it self.
 
     Holds :class:`.Event` instances. It can be indexed to reach each of the
     :class:`.Event`\ s like::
 
-      >>> l = List('25')
+      >>> l = EDL('25')
       >>> l.append(Event())
       >>> l[0]
       <edl.edl.Event object at 0x7fb630564490>
@@ -33,7 +33,7 @@ class List(object):
         self.title = ''
 
     def __getitem__(self, i):
-        """Returns each of the Events that this List holds.
+        """Returns each of the Events that this EDL holds.
         """
         return self.events[i]
 
@@ -99,7 +99,7 @@ class List(object):
 
     def to_string(self):
         """The string output of the Events, this matches a standard EDL file
-        format. Using List.to_string() should return the edl back to its
+        format. Using EDL.to_string() should return the edl back to its
         original format.
         """
         # for each Event call their to_string() method and gather the output
@@ -550,7 +550,7 @@ class Parser(object):
         if isinstance(input_, str):
             input_ = input_.splitlines(True)
         if isinstance(input_, collections.Iterable):
-            stack = List(self.fps)
+            stack = EDL(self.fps)
             for l in input_:
                 for m in self.get_matchers():
                     m.apply(stack, l)

@@ -2,7 +2,7 @@
 
 import unittest
 import re
-from edl import TitleMatcher, List
+from edl import TitleMatcher, EDL
 
 
 class TitleMatcherTestCase(unittest.TestCase):
@@ -32,7 +32,7 @@ class TitleMatcherTestCase(unittest.TestCase):
     def test_TitleMatcher_apply_is_working_properly(self):
         """testing if the TitleMatcher.apply() is working properly
         """
-        ed_list = List('24')
+        ed_list = EDL('24')
 
         e = TitleMatcher()
 

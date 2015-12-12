@@ -134,6 +134,7 @@ class Parser(object):
                 l = l.rstrip('\n')  # Remove trailing newlines, usu. from files
                 if l:  # Only spend cycles on lines with data
                     for m in self._matchers:
-                        m.apply(stack, l)
+                        if m.apply(stack, l):
+                            break
         pprint.PrettyPrinter(indent=4)
         return stack

@@ -17,6 +17,7 @@ class Matcher(object):
 
     def apply(self, stack, line):
         sys.stderr.write("Skipping:" + line)
+        return True
 
 
 class TitleMatcher(Matcher):
@@ -29,8 +30,9 @@ class TitleMatcher(Matcher):
         m = re.search(self.regex, line)
         try:
             stack.title = m.group(1).strip()
+            return True
         except (IndexError, AttributeError):
-            pass
+            return False
 
 
 class CommentMatcher(Matcher):
@@ -44,11 +46,15 @@ class CommentMatcher(Matcher):
         #print line
         m = re.search(self.regex, line)
         if m:
+            # TODO: Handle comments that are not tied to an event
             if len(stack) > 0:
                 stack[-1].comments.append("* " + m.group(1))
                 mo = re.search('\*\s+FROM\s+CLIP\s+NAME:\s+(.+)', line)
                 if mo:
                     stack[-1].clip_name = mo.group(1).strip()
+                return True
+        else:
+            return False
 
 
 class FallbackMatcher(Matcher):
@@ -59,7 +65,7 @@ class FallbackMatcher(Matcher):
         Matcher.__init__(self, '/^(\w)(.+)/')
 
     def apply(self, stack, line):
-        pass
+        return True
 
 
 class NameMatcher(Matcher):
@@ -73,10 +79,11 @@ class NameMatcher(Matcher):
 
     def apply(self, stack, line):
         m = re.search(self.regex, line)
-        #print line
-        if len(stack) > 0:
-            if m:
-                stack[-1].clip_name = m.group(2).strip()
+        if m and len(stack) > 0:
+            stack[-1].clip_name = m.group(2).strip()
+            return True
+        else:
+            return False
 
 
 class SourceMatcher(Matcher):
@@ -88,10 +95,12 @@ class SourceMatcher(Matcher):
 
     def apply(self, stack, line):
         m = re.search(self.regex, line)
-        #print line
-        if len(stack) > 0:
-            if m:
-                stack[-1].source_file = m.group(2).strip()
+
+        if m and len(stack) > 0:
+            stack[-1].source_file = m.group(2).strip()
+            return True
+        else:
+            return False
 
 
 class EffectMatcher(Matcher):
@@ -105,6 +114,9 @@ class EffectMatcher(Matcher):
         m = re.search(self.regex, line)
         if m:
             stack[-1].transition.effect = m.group(2).strip()
+            return True
+        else:
+            return False
 
 
 class TimewarpMatcher(Matcher):
@@ -124,6 +136,9 @@ class TimewarpMatcher(Matcher):
                 Timewarp(m.group(1), m.group(2), m.group(3), self.fps)
             if float(m.group(2)) < 0:
                 stack[-1].timewarp.reverse = True
+            return True
+        else:
+            return False
 
 
 class EventMatcher(Matcher):
@@ -151,7 +166,6 @@ class EventMatcher(Matcher):
         return in_string.strip()
 
     def apply(self, stack, line):
-        evt = None
         m = re.search(self.regex, line.strip())
         if m:
             matches = m.groups()
@@ -175,4 +189,6 @@ class EventMatcher(Matcher):
             evt.rec_start_tc = timecode.Timecode(self.fps, evt.rec_start_tc)
             evt.rec_end_tc = timecode.Timecode(self.fps, evt.rec_end_tc)
             stack.append(evt)
-        return evt
+            return True
+        else:
+            return False

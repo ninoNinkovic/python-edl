@@ -116,10 +116,13 @@ class Parser(object):
         else:
             self.fps = fps
 
-    def get_matchers(self):
-        return [TitleMatcher(), EventMatcher(self.fps), EffectMatcher(),
-                NameMatcher(), SourceMatcher(), TimewarpMatcher(self.fps),
-                CommentMatcher()]
+        self._matchers = [TitleMatcher(),
+                          EventMatcher(self.fps),
+                          EffectMatcher(),
+                          NameMatcher(),
+                          SourceMatcher(),
+                          TimewarpMatcher(self.fps),
+                          CommentMatcher()]
 
     def parse(self, input_):
         stack = None
@@ -128,7 +131,7 @@ class Parser(object):
         if isinstance(input_, collections.Iterable):
             stack = EDL(self.fps)
             for l in input_:
-                for m in self.get_matchers():
+                for m in self._matchers:
                     m.apply(stack, l)
         pprint.PrettyPrinter(indent=4)
         return stack

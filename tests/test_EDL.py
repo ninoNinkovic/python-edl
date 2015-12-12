@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+from itertools import izip_longest
 from edl import Parser
 
 
@@ -8,33 +9,34 @@ class EDLTestCase(unittest.TestCase):
     """tests the edl.edl.List class
     """
 
-    def setup(self):
-        """set up the tests
-        """
-        pass
-
-    def test_repr_is_matching_Python_standard(self):
-        """testing if the EDL.__repr__ method output is matching Python
-        standard of <edl.edl.EDL object at 0x??????> format
-        """
-        self.fail('test is not implemented yet')
-
     def testing_to_edl_method_will_output_the_standard_edl_case1(self):
         """testing if to_string will output the EDL as string
         """
         p = Parser('24')
         with open('../tests/test_data/test_24.edl') as f:
-            s = p.parse(f)
+            expected_edl = [line.rstrip('\n') for line in f.readlines()]
+            # Reset to beginning of file and read into new EDL
+            f.seek(0)
+            actual_edl = p.parse(f).to_string().split('\n')
 
-        with open('../tests/test_data/test_24.edl') as f:
-            expected_edl = f.readlines()
+        # Remove blank lines, since they don't affect data content
+        expected_edl = [line for line in expected_edl if line]
+        actual_edl = [line for line in actual_edl if line]
 
         self.maxDiff = None
 
-        self.assertEqual(
-            ''.join(expected_edl),
-            s.to_string()
-        )
+        self.assertEqual(len(expected_edl), len(actual_edl),
+                         "Generated EDL has the same number of data lines as "
+                         "original EDL.")
+
+        for expected, actual in izip_longest(expected_edl, actual_edl):
+            # Remove extraneous whitespace to prevent false negatives
+            expected = " ".join(expected.split())
+            actual = " ".join(actual.split())
+
+            self.assertEqual(expected, actual, "Generated EDL line is the same"
+                                               "as original EDL line.")
+
 
     def testing_to_edl_method_will_output_the_standard_edl_case2(self):
         """testing if to_string will output the EDL as string

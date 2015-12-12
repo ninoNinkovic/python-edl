@@ -74,11 +74,6 @@ class Event(object):
 
         return s
 
-    def to_inspect(self):
-        """Human Readable string representation of edl event.
-        """
-        return self.__repr__()
-
     def get_comments(self):
         """Return comments array
         """

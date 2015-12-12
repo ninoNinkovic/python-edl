@@ -4,8 +4,8 @@ Module EDL
 unit test suite
 """
 
-import edl
 import unittest
+from edl import Parser
 
 
 class ParserTestCase(unittest.TestCase):
@@ -13,7 +13,7 @@ class ParserTestCase(unittest.TestCase):
     """
 
     def test_24fps(self):
-        p = edl.Parser('24')
+        p = Parser('24')
         with open('../tests/test_data/test_24.edl') as f:
             s = p.parse(f)
 
@@ -47,16 +47,16 @@ class ParserTestCase(unittest.TestCase):
                          "Wrong Source end complex event")
 
     def test_pal(self):
-        p = edl.Parser('25')
+        p = Parser('25')
         with open('../tests/test_data/test_25.edl') as f:
             s = p.parse(f)
 
     def test_ntsc(self):
-        p = edl.Parser('29.97')
+        p = Parser('29.97')
         with open('../tests/test_data/test_2997NDF.edl') as f:
             s = p.parse(f)
 
     def test_2398fps(self):
-        p = edl.Parser('23.98')
+        p = Parser('23.98')
         with open('../tests/test_data/test_2398.edl') as f:
             s = p.parse(f)

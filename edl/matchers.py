@@ -132,12 +132,19 @@ class EventMatcher(Matcher):
 
     def __init__(self, fps):
         regexp = re.compile(
-            r"(\d+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S*)\s+(\d{1,2}:\d{1,2}:\d{1,2}"
-            r"[:;]\d{1,3})\s+(\d{1,2}:\d{1,2}:\d{1,2}[:;]\d{1,3})\s+(\d{1,2}:"
-            r"\d{1,2}:\d{1,2}[:;]\d{1,3})\s+(\d{1,2}:\d{1,2}:\d{1,2}[:;]"
-            r"\d{1,3})")
+            r"(?P<num>\d+)\s+"
+            r"(?P<reel>\S+)\s+"
+            r"(?P<track>\S+)\s+"
+            r"(?P<tr_code>\S+)\s+"
+            r"(?P<aux>\S*)\s+"
+            r"(?P<src_in>\d{1,2}:\d{1,2}:\d{1,2}[:;]\d{1,3})\s+"
+            r"(?P<src_out>\d{1,2}:\d{1,2}:\d{1,2}[:;]\d{1,3})\s+"
+            r"(?P<rec_in>\d{1,2}:\d{1,2}:\d{1,2}[:;]\d{1,3})\s+"
+            r"(?P<rec_out>\d{1,2}:\d{1,2}:\d{1,2}[:;]\d{1,3})")
         Matcher.__init__(self, regexp)
         self.fps = fps
+        self._keys = ['num', 'reel', 'track', 'tr_code', 'aux', 'src_start_tc',
+                      'src_end_tc', 'rec_start_tc', 'rec_end_tc']
 
     @classmethod
     def stripper(cls, in_string):
@@ -148,10 +155,8 @@ class EventMatcher(Matcher):
         m = re.search(self.regex, line.strip())
         if m:
             matches = m.groups()
-            keys = ['num', 'reel', 'track', 'tr_code', 'aux', 'src_start_tc',
-                    'src_end_tc', 'rec_start_tc', 'rec_end_tc']
             values = map(self.stripper, matches)
-            evt = Event(dict(zip(keys, values)))
+            evt = Event(dict(zip(self._keys, values)))
             t = evt.tr_code
             if t == 'C':
                 if len(stack) > 0:

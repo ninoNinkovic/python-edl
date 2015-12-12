@@ -131,7 +131,9 @@ class Parser(object):
         if isinstance(input_, collections.Iterable):
             stack = EDL(self.fps)
             for l in input_:
-                for m in self._matchers:
-                    m.apply(stack, l)
+                l = l.rstrip('\n')  # Remove trailing newlines, usu. from files
+                if l:  # Only spend cycles on lines with data
+                    for m in self._matchers:
+                        m.apply(stack, l)
         pprint.PrettyPrinter(indent=4)
         return stack

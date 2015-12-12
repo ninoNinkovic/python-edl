@@ -12,11 +12,6 @@ class EffectMatcherTestCase(unittest.TestCase):
     """tests the edl.edl.EffectMatcher class
     """
 
-    def setup(self):
-        """set up the tests
-        """
-        pass
-
     def test_EffectMatcher_regex_is_working_properly(self):
         """testing if the EffectMatcher.regex is working properly
         """

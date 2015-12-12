@@ -10,11 +10,6 @@ class TitleMatcherTestCase(unittest.TestCase):
     """tests the edl.edl.TitleMatcher class
     """
 
-    def setup(self):
-        """set up the tests
-        """
-        pass
-
     def test_TitleMatcher_regex_is_working_properly(self):
         """testing if the TitleMatcher.regex is working properly
         """

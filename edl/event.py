@@ -11,7 +11,11 @@ class Event(object):
         """
         self.comments = []
         self.timewarp = None
+        # TODO: implement prev_event property to allow easy access of previous event when iterating.
+        self.prev_event = None
         self.next_event = None
+        # MARK: next_event only returns true if next event is a transition of some sort. The prop name is misleading and should be changed. While next_event should be used to allow looking ahead into an event.
+        self.next_is_transition = None
         self.track = None
         self.clip_name = None
         self.source_file = None

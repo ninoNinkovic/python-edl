@@ -51,6 +51,7 @@ class Timewarp(object):
         self.fps = fps
         self.warp_fps = float(warp_fps)
         self.timecode = timecode.Timecode(fps, tc)
+        self.timecode_warped = timecode.Timecode(abs(self.warp_fps), tc)
 
     def to_string(self):
         """the string representation of this Timewarp instance

@@ -47,6 +47,7 @@ class CommentMatcher(Matcher):
         m = re.search(self.regex, line)
         if m:
             # TODO: Handle comments that are not tied to an event
+            # TODO: Parse locators into event instance var [(color,data)]
             if len(stack) > 0:
                 stack[-1].comments.append("* " + m.group(1))
                 mo = re.search('\*\s+FROM\s+CLIP\s+NAME:\s+(.+)', line)
@@ -170,7 +171,10 @@ class EventMatcher(Matcher):
         if m:
             matches = m.groups()
             values = map(self.stripper, matches)
-            evt = Event(dict(zip(self._keys, values)))
+            options = dict(zip(self._keys, values))
+            # MARK: add edl fps to every event instance before Event() is instantiated
+            options['fps'] = self.fps
+            evt = Event(options)
             t = evt.tr_code
             if t == 'C':
                 if len(stack) > 0:
@@ -184,10 +188,10 @@ class EventMatcher(Matcher):
                 evt.transition = Key()
             else:
                 evt.transition = None
-            evt.src_start_tc = timecode.Timecode(self.fps, evt.src_start_tc)
-            evt.src_end_tc = timecode.Timecode(self.fps, evt.src_end_tc)
-            evt.rec_start_tc = timecode.Timecode(self.fps, evt.rec_start_tc)
-            evt.rec_end_tc = timecode.Timecode(self.fps, evt.rec_end_tc)
+            # evt.src_start_tc = timecode.Timecode(self.fps, evt.src_start_tc)
+            # evt.src_end_tc = timecode.Timecode(self.fps, evt.src_end_tc)
+            # evt.rec_start_tc = timecode.Timecode(self.fps, evt.rec_start_tc)
+            # evt.rec_end_tc = timecode.Timecode(self.fps, evt.rec_end_tc)
             stack.append(evt)
             return True
         else:

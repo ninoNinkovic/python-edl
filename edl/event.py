@@ -14,7 +14,7 @@ class Event(object):
         # TODO: implement prev_event property to allow easy access of previous event when iterating.
         self.prev_event = None
         self.next_event = None
-        # MARK: next_event only returns true if next event is a transition of some sort. The prop name is misleading and should be changed. While next_event should be used to allow looking ahead into an event.
+        # MARK: next_event only returns true if next event is a transition of some sort. The prop name is misleading and should be changed. While next_event should be used for event lookahead
         self.next_is_transition = None
         self.track = None
         self.clip_name = None
@@ -28,12 +28,34 @@ class Event(object):
         self.src_start_tc = None
         self.num = None
         self.tr_code = None
+        self.fps    = abs(float(options['fps']))
 
         # TODO: This is absolutely wrong and not safe. Please validate the
         #       incoming values, before adopting them as instance variables
         #       and instance methods
+        from timecode import Timecode
         for o in options:
             self.__dict__[o] = options[o]
+            validate = False
+            if o in ['rec_end_tc','rec_start_tc','src_end_tc','src_start_tc']:
+                # MARK: Validate value is Timecode instance
+                if isinstance(options[o], Timecode):
+                    self.__dict__[o] = options[o]
+                    validate = True
+                elif len(options[o]) == 11: # if length of timecode string. because of initial instantiation of Event()
+                    self.__dict__[o] = Timecode(self.fps, options[o])
+                    validate = True
+                else:
+                    validate = False
+                    pass
+
+            elif o in ['timewarp']:
+                if isinstance(options[o], Timewarp):
+                    self.__dict__[o] = options[o]
+                    validate = True
+            else:
+                self.__dict__[o] = options[o]
+                validate = False
 
     # def __repr__(self):
     #     v = ["(\n"]

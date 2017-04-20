@@ -28,7 +28,7 @@ class Event(object):
         self.src_start_tc = None
         self.num = None
         self.tr_code = None
-        self.fps    = abs(float(options['fps']))
+        self.fps    = abs(float(options['fps'])) if  'fps' in options else None
 
         # TODO: This is absolutely wrong and not safe. Please validate the
         #       incoming values, before adopting them as instance variables

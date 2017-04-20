@@ -10,7 +10,10 @@ class EDLTestCase(unittest.TestCase):
     """
 
     def runTest(self):
+        print 'Running EDL TestCase'
         self.testing_to_edl_method_will_output_the_standard_edl_case1()
+        self.testing_to_edl_method_will_output_the_standard_edl_case2()
+        self.testing_to_edl_method_will_output_the_standard_edl_case3()
 
 
     def testing_to_edl_method_will_output_the_standard_edl_case1(self):
@@ -27,7 +30,7 @@ class EDLTestCase(unittest.TestCase):
         expected_edl = [line for line in expected_edl if line]
         actual_edl = [line for line in actual_edl if line]
 
-        self.maxDiff = None
+        # self.maxDiff = None
         # print expected_edl
         print actual_edl
         print len(actual_edl),len(expected_edl)

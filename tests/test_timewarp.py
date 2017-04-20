@@ -7,6 +7,8 @@ from edl.effects import Timewarp
 class TimeWarpTestCase(unittest.TestCase):
     """tests the edl.edl.Timewarp class
     """
+    def runTest(self):
+        self.test_to_string_is_working_properly()
 
     def test_to_string_is_working_properly(self):
         """testing if the TitleMatcher.to_string is working properly
